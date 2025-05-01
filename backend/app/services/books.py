@@ -114,8 +114,7 @@ def get_books(
         )
     elif sort_by == 'popularity_desc':
         # Sort by review count (desc) and then by final price (asc)
-        # Chỉ hiển thị sách có đánh giá khi sắp xếp theo popularity
-        query = query.where(reviews_stats_subquery.c.avg_rating > 0)
+        # Không lọc sách không có đánh giá, chỉ sắp xếp theo số lượng đánh giá
         query = query.order_by(
             desc(func.coalesce(reviews_stats_subquery.c.reviews_count, 0)),
             "final_price"
