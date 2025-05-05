@@ -17,7 +17,7 @@ def get_books(
     min_rating: Optional[float] = None,
     sort_by: Optional[str] = None,
     page: int = 1,
-    size: int = 10,
+    size: int = 15,
     session: Optional[Session] = None
 ) -> Dict[str, Any]:
     """
@@ -41,7 +41,7 @@ def get_books(
         Dictionary with total count, page info, and list of books
     """
     if size not in PAGE_SIZES:
-        size = 10
+        size = 15
     if page < 1:
         page = 1
     if session is None:

@@ -17,6 +17,8 @@ origins = [
     "http://localhost",
     "http://localhost:5173",  # Vite default port
     "http://127.0.0.1:5173",
+    "http://frontend",        # Docker container name
+    "http://frontend:80",     # Docker container with port
 ]
 
 app.add_middleware(

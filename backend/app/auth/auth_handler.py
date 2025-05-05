@@ -1,14 +1,17 @@
 from datetime import datetime, timedelta, timezone
 from typing import Dict, Optional
 
-import jwt
+from jose import jwt, JWTError
 from fastapi import HTTPException, status
 
-# Cấu hình JWT
-SECRET_KEY = "your-secret-key"  # Nên lưu trong biến môi trường
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-REFRESH_TOKEN_EXPIRE_DAYS = 30
+# Import settings from config
+from app.config import settings
+
+# JWT Configuration
+SECRET_KEY = settings.jwt_secret
+ALGORITHM = settings.jwt_algorithm
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_minutes
+REFRESH_TOKEN_EXPIRE_DAYS = settings.refresh_token_expire_days
 
 def create_access_token(data: Dict) -> str:
     """
@@ -37,7 +40,7 @@ def verify_token(token: str) -> Dict:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
-    except jwt.PyJWTError:
+    except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",

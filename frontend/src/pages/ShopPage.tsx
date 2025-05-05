@@ -84,7 +84,7 @@ const ShopPage = () => {
 
   const getInitialShowCount = () => {
     const size = searchParams.get('size');
-    return size ? parseInt(size, 10) : 10;
+    return size ? parseInt(size, 10) : 15;
   };
 
   const getInitialPage = () => {

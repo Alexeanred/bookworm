@@ -14,7 +14,7 @@ async def get_books_route(
     min_rating: Optional[float] = Query(None, ge=1, le=5, description="Minimum average rating (1-5)"),
     sort_by: Optional[str] = Query(None, description="Options: price_asc, price_desc, discount_desc, popularity_desc"),
     page: int = Query(1, ge=1),
-    size: int = Query(10, description="Options: 5, 15, 20, 25"),
+    size: int = Query(15, description="Options: 5, 15, 20, 25"),
     session: Optional[Session] = Depends(get_session)
 ) -> Dict[str, Any]:
     """

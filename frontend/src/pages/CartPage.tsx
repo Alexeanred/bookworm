@@ -146,80 +146,138 @@ const CartPage: React.FC<CartPageProps> = ({ onLoginSuccess }) => {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <div className="container mx-auto px-6 py-8 flex-1">
-        <h2 className="text-2xl font-bold mb-6">Your cart: {totalItems} items</h2>
-        <div className="flex gap-8">
-          {/* Cart Items */}
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 flex-1">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Your cart: {totalItems} items</h2>
+
+        {/* Responsive layout - stack on mobile, side-by-side on larger screens */}
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
+          {/* Cart Items - Responsive container */}
           <div className="flex-1 bg-white border rounded">
-            <table className="w-full text-left">
-              <thead className="bg-gray-50 border-b">
-                <tr>
-                  <th className="p-4" style={{ width: '60%' }}>Product</th>
-                  <th style={{ width: '15%' }} className="pl-2">Price</th>
-                  <th style={{ width: '15%' }} className="text-center">Quantity</th>
-                  <th style={{ width: '10%' }} className="text-right pr-4">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cart.map(item => (
-                  <tr key={item.id} className="border-b hover:bg-gray-50">
-                    <td className="p-4 flex items-center gap-4 cursor-pointer" style={{ width: '60%' }} onClick={() => window.open(`/product/${item.id}`, '_blank')}>
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        onError={(e) => {
-                          // Khi ảnh lỗi, thay thế bằng ảnh mặc định
-                          e.currentTarget.src = '/covers/default.jpg';
-                        }}
-                        className="w-20 h-28 object-cover bg-gray-200 rounded"
-                      />
-                      <div className="overflow-hidden">
-                        <div className="font-semibold text-lg truncate">{item.title}</div>
-                        <div className="text-gray-600 text-sm">{item.author}</div>
-                      </div>
-                    </td>
-                    <td className="font-semibold" style={{ width: '15%' }}>
-                      <div className="text-left pl-2 whitespace-nowrap">
-                        {item.discountPrice ? (
-                          <>
-                            <span className="text-black">${item.discountPrice.toFixed(2)}</span>
-                            <span className="block text-xs text-gray-400 line-through">${item.price.toFixed(2)}</span>
-                          </>
-                        ) : (
-                          <span>${item.price.toFixed(2)}</span>
-                        )}
-                      </div>
-                    </td>
-                    <td style={{ width: '15%' }} className="text-center">
-                      <div className="flex items-center justify-center gap-2 mx-auto" style={{ width: '90px' }}>
-                        <button className="border px-2 rounded" onClick={() => handleQtyChange(item.id, Math.max(0, item.quantity - 1))} disabled={item.quantity <= 0}>-</button>
-                        <span className="px-3 min-w-[20px] text-center">{item.quantity}</span>
-                        <button className="border px-2 rounded" onClick={() => handleQtyChange(item.id, Math.min(8, item.quantity + 1))} disabled={item.quantity >= 8}>+</button>
-                      </div>
-                    </td>
-                    <td className="font-semibold" style={{ width: '10%' }}>
-                      <div className="text-right pr-4 whitespace-nowrap">
-                        ${((item.discountPrice ?? item.price) * item.quantity).toFixed(2)}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-                {cart.length === 0 && (
+            {/* Desktop view - Table layout */}
+            <div className="hidden md:block">
+              <table className="w-full text-left">
+                <thead className="bg-gray-50 border-b">
                   <tr>
-                    <td colSpan={4} className="text-center py-8 text-gray-500">Your cart is empty.</td>
+                    <th className="p-4 w-3/5">Product</th>
+                    <th className="pl-2 w-1/6">Price</th>
+                    <th className="text-center w-1/6">Quantity</th>
+                    <th className="text-right pr-4 w-1/12">Total</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {cart.map(item => (
+                    <tr key={item.id} className="border-b hover:bg-gray-50">
+                      <td className="p-4 flex items-center gap-4 cursor-pointer" onClick={() => window.open(`/product/${item.id}`, '_blank')}>
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          onError={(e) => {
+                            e.currentTarget.src = '/covers/default.jpg';
+                          }}
+                          className="w-16 sm:w-20 h-24 sm:h-28 object-cover bg-gray-200 rounded"
+                        />
+                        <div className="overflow-hidden">
+                          <div className="font-semibold text-base sm:text-lg truncate">{item.title}</div>
+                          <div className="text-gray-600 text-xs sm:text-sm">{item.author}</div>
+                        </div>
+                      </td>
+                      <td className="font-semibold">
+                        <div className="text-left pl-2 whitespace-nowrap">
+                          {item.discountPrice ? (
+                            <>
+                              <span className="text-black">${item.discountPrice.toFixed(2)}</span>
+                              <span className="block text-xs text-gray-400 line-through">${item.price.toFixed(2)}</span>
+                            </>
+                          ) : (
+                            <span>${item.price.toFixed(2)}</span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="text-center">
+                        <div className="flex items-center justify-center gap-2 mx-auto" style={{ width: '90px' }}>
+                          <button className="border px-2 rounded" onClick={() => handleQtyChange(item.id, Math.max(0, item.quantity - 1))} disabled={item.quantity <= 0}>-</button>
+                          <span className="px-3 min-w-[20px] text-center">{item.quantity}</span>
+                          <button className="border px-2 rounded" onClick={() => handleQtyChange(item.id, Math.min(8, item.quantity + 1))} disabled={item.quantity >= 8}>+</button>
+                        </div>
+                      </td>
+                      <td className="font-semibold">
+                        <div className="text-right pr-4 whitespace-nowrap">
+                          ${((item.discountPrice ?? item.price) * item.quantity).toFixed(2)}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {cart.length === 0 && (
+                    <tr>
+                      <td colSpan={4} className="text-center py-8 text-gray-500">Your cart is empty.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile view - Card layout */}
+            <div className="md:hidden">
+              {cart.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">Your cart is empty.</div>
+              ) : (
+                <div className="divide-y">
+                  {cart.map(item => (
+                    <div key={item.id} className="p-4 hover:bg-gray-50">
+                      {/* Product info */}
+                      <div className="flex gap-3 mb-3 cursor-pointer" onClick={() => window.open(`/product/${item.id}`, '_blank')}>
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          onError={(e) => {
+                            e.currentTarget.src = '/covers/default.jpg';
+                          }}
+                          className="w-16 h-24 object-cover bg-gray-200 rounded flex-shrink-0"
+                        />
+                        <div className="overflow-hidden">
+                          <div className="font-semibold text-base truncate">{item.title}</div>
+                          <div className="text-gray-600 text-xs">{item.author}</div>
+
+                          {/* Price - Mobile view */}
+                          <div className="mt-1 font-semibold">
+                            {item.discountPrice ? (
+                              <>
+                                <span className="text-black">${item.discountPrice.toFixed(2)}</span>
+                                <span className="ml-1 text-xs text-gray-400 line-through">${item.price.toFixed(2)}</span>
+                              </>
+                            ) : (
+                              <span>${item.price.toFixed(2)}</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Quantity and total - Mobile view */}
+                      <div className="flex justify-between items-center mt-2">
+                        <div className="flex items-center gap-2">
+                          <button className="border px-2 rounded" onClick={() => handleQtyChange(item.id, Math.max(0, item.quantity - 1))} disabled={item.quantity <= 0}>-</button>
+                          <span className="px-3 min-w-[20px] text-center">{item.quantity}</span>
+                          <button className="border px-2 rounded" onClick={() => handleQtyChange(item.id, Math.min(8, item.quantity + 1))} disabled={item.quantity >= 8}>+</button>
+                        </div>
+                        <div className="font-semibold">
+                          Total: ${((item.discountPrice ?? item.price) * item.quantity).toFixed(2)}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-          {/* Cart Totals */}
-          <div className="w-96 bg-white border rounded h-fit">
-            <div className="p-6 pb-4">
+
+          {/* Cart Totals - Responsive width */}
+          <div className="w-full lg:w-80 xl:w-96 bg-white border rounded h-fit">
+            <div className="p-4 sm:p-6 pb-2 sm:pb-4">
               <div className="font-semibold text-lg text-center">Cart Totals</div>
             </div>
             <hr className="border-t border-gray-300 mx-0 my-0" />
-            <div className="p-6 pt-4">
-              <div className="text-3xl font-bold mb-6 text-center">${total.toFixed(2)}</div>
+            <div className="p-4 sm:p-6 pt-2 sm:pt-4">
+              <div className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center">${total.toFixed(2)}</div>
               <button
                 className={`w-full font-semibold py-2 rounded mb-2 transition ${
                   isLoading
