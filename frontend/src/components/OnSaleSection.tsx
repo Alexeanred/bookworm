@@ -29,7 +29,7 @@ const OnSaleSection = () => {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold">On Sale</h2>
         <Link
-          to="/shop?sort=discount_desc&size=10"
+          to="/shop?sort=discount_desc&page=1"
           className="text-gray-600 hover:text-blue-600"
         >
           View All ›
